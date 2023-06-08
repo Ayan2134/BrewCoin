@@ -25,23 +25,18 @@ class  Block :
          return f"Block Number : {self.block_num}\n Block Hash : {self.hash()}\n Previous Block Hash : {self.prev_hash}\n Data : {self.data}\n Nonce : {self.nonce}"
     
 class Blockchain :
-     difficulty=3
+     difficulty=4
      
      def __init__(self,chain=[]) :
           self.chain=chain
 
      def add_block(self,block) :
-        new_block={ "hash" : block.hash(),
-                    "previous _block" : block.prev_hash,
-                    "Block_num" : block.block_num ,
-                    "Data" : block.data ,
-                    "Nonce" : block.nonce
-                   }
-        self.chain.append(new_block)
+        self.chain.append(block)
+
      def mine(self,block) :
         difficulty=self.difficulty
         try :
-            block.prev_hash=self.chain[-1].get("hash")
+            block.prev_hash=self.chain[-1].hash()
         except :
              pass
         while True:
@@ -50,6 +45,13 @@ class Blockchain :
                   break
              else :
                   block.nonce+=1
+     def isValid(self) :
+          for i in range(1,len(self.chain)) :
+               previous_hash=self.chain[i].prev_hash
+               current=self.chain[i-1].hash() #re hashing the block to check if it has been changed
+               if previous_hash!=current or current[:self.difficulty]!='0'*self.difficulty :
+                    return False
+          return True
 
 def main() :
      blockchain=Blockchain()
@@ -61,8 +63,15 @@ def main() :
           i+=1
           block=Block(data,i)
           blockchain.mine(block)
+     blockchain.chain[1].data="gourish"
+     blockchain.mine(blockchain.chain[1])
      for block in blockchain.chain :
           print(block)
+     validity=blockchain.isValid()
+     if validity==True :
+          print("\nValid Blockchain")
+     else :
+          print("\nInvalid Blockchain")
 
 if __name__ == '__main__' :
      main()
