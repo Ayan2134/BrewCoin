@@ -63,8 +63,6 @@ def main() :
           i+=1
           block=Block(data,i)
           blockchain.mine(block)
-     blockchain.chain[1].data="gourish"
-     blockchain.mine(blockchain.chain[1])
      for block in blockchain.chain :
           print(block)
      validity=blockchain.isValid()
