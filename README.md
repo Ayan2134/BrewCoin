@@ -1,1 +1,1 @@
-# BinchoCoin
+# Brewcoin
